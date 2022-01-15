@@ -1,70 +1,83 @@
-// NeoPixel Ring simple sketch (c) 2013 Shae Erisson
-// Released under the GPLv3 license to match the rest of the
-// Adafruit NeoPixel library
-
 #include <Adafruit_NeoPixel.h>
 #ifdef __AVR__
- #include <avr/power.h> // Required for 16 MHz Adafruit Trinket
+#include <avr/power.h> // Required for 16 MHz Adafruit Trinket
 #endif
 
-// Which pin on the Arduino is connected to the NeoPixels?
-#define PIN        6 // On Trinket or Gemma, suggest changing this to 1
+//Selecciona el pin digital que controlara la tira led, este debe ser un pin con pwm
+#define PIN        6 
 
-// How many NeoPixels are attached to the Arduino?
-#define NUMPIXELS 256 // Popular NeoPixel ring size
+//Se establece el numero de pines que tiene la tira
+#define NUMPIXELS 30 
 
-// When setting up the NeoPixel library, we tell it how many pixels,
-// and which pin to use to send signals. Note that for older NeoPixel
-// strips you might need to change the third parameter -- see the
-// strandtest example for more information on possible values.
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
-int DELAYVAL = 1;// Time (in milliseconds) to pause between pixels
-   int acumulado = NUMPIXELS;
+
+//Se establece el tiempo en milisegundos que tardara cada iteracion del loop
+int DELAY = 22;
+
+//Se establece una variable llamada acumulada que parte siendo el numero e leds de la tira
+int acumulado = NUMPIXELS;
+
 void setup() {
-  // These lines are specifically to support the Adafruit Trinket 5V 16 MHz.
-  // Any other board, you can remove this part (but no harm leaving it):
+
 #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
   clock_prescale_set(clock_div_1);
 #endif
-  // END of Trinket-specific code.
-  Serial.begin(9600);
-  pixels.begin(); // INITIALIZE NeoPixel strip object (REQUIRED)
+
+ Serial.begin(9600);
+ pixels.begin(); // INITIALIZE NeoPixel strip object (REQUIRED)
  
 }
+
+
 
 void loop() {
   //pixels.clear(); // Set all pixel colors to 'off'
 
+   charger_efect();
 
-  
-      
-  for(int i=0; i<NUMPIXELS; i++) { // For each pixel...
-  
-    // pixels.Color() takes RGB values, from 0,0,0 up to 255,255,255
-    // Here we're using a moderately bright green color:
-
-
-    for(int j = acumulado; j< NUMPIXELS; j++){
-        pixels.setPixelColor(j, pixels.Color(70, 0, 30));
-      }
-
-    pixels.setPixelColor(i, pixels.Color(70, 0, 30));
-    
-    pixels.setPixelColor((i-2), pixels.Color(0, 0, 0));
-
-
-
-
-    pixels.show();   // Send the updated pixel colors to the hardware.
-
-
-    if(i == (NUMPIXELS -1)){
-      acumulado--;
-     Serial.println(acumulado);
-      }
-    
- 
-  }
-
-  if(acumulado == 0){acumulado = NUMPIXELS;}
 }
+
+
+
+
+void charger_efect(){
+
+    //Recorremos la tira led
+    for( int i = 0; i < NUMPIXELS; i++){
+
+        //Por cada iteracion encendemos el led con el numero de la iteracion
+        pixels.setPixelColor(i, pixels.Color(70, 0, 30));
+
+        // si el numero de la iteracion  es menor al numero acumulado apagamos el pixel que esta justo atras del que acabamos de encender
+         if(i < acumulado){
+           pixels.setPixelColor(i-1, pixels.Color(0, 0, 0));
+         }
+
+     
+        //Encendemos los leds
+        pixels.show();
+
+        //Si i es igual el numero de acumulados reducimos el numero de acumulado en 1 y reiniciamos la iteracion, ademas reducimos el tiempo de espera en 1 para aumentar la velocidad
+        if(i == (acumulado-1) ){
+            acumulado--; 
+            Serial.print("Posicion: ");
+            Serial.println(acumulado);
+            if(DELAY){
+              DELAY--;     
+             }
+             //Imprimimos los valores para monitorearlos
+            Serial.print("Espera: ");
+            Serial.println(DELAY); 
+          }
+        //Esperamos el tiemop definido para la siguiente iteracion
+        delay(DELAY);
+      }
+
+
+    if(acumulado == 0){
+        acumulado = NUMPIXELS;
+        DELAY = 22;
+        Serial.println("RESETEAMOS ACUMULADO"); 
+      }
+  
+  }
