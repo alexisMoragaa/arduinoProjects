@@ -7,12 +7,12 @@
 #define PIN        6 
 
 //Se establece el numero de pines que tiene la tira
-#define NUMPIXELS 30 
+#define NUMPIXELS 32 
 
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
 //Se establece el tiempo en milisegundos que tardara cada iteracion del loop
-int DELAY = 22;
+int DELAY = 26;
 
 //Se establece una variable llamada acumulada que parte siendo el numero e leds de la tira
 int acumulado = NUMPIXELS;
@@ -62,7 +62,7 @@ void charger_efect(){
             acumulado--; 
             Serial.print("Posicion: ");
             Serial.println(acumulado);
-            if(DELAY){
+            if(DELAY > 3){
               DELAY--;     
              }
              //Imprimimos los valores para monitorearlos
