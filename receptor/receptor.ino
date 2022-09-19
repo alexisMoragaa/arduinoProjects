@@ -1,6 +1,7 @@
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
+#include <Servo.h>
 
 
 // SCK  =>  13
@@ -42,6 +43,8 @@ Data_Package data;
 
 
 
+Servo servo;
+
 void setup() {
    Serial.begin(9600);
   radio.begin();
@@ -50,6 +53,8 @@ void setup() {
   radio.setDataRate(RF24_250KBPS);
   radio.setPALevel(RF24_PA_LOW);
   radio.startListening(); //  Set the module as receiver
+
+  servo.attach(A7);
   resetData();
 
 }
@@ -88,6 +93,8 @@ if (radio.available()) {
 
 
 
+  int   GRADOS = map(data.ch4_right_x, 0, 255, 65, 125);
+  servo.write(GRADOS);
 }
 
 
