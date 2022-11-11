@@ -5,11 +5,11 @@
 #define BUZZER  13
 
 int setpoint = 0;
-int gyroSpeed = 120;
-int base = 60;
+int gyroSpeed = 250;
+int base = 150;
 
-float Kprop = 0.13;
-float Kderiv = 0.4;
+float Kprop = 0.5;
+float Kderiv = 0.3;
 float Kinte = 0.1;
 String s = "";
 char c = 0;

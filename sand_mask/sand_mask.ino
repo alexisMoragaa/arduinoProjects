@@ -30,8 +30,6 @@ void setup() {
   pinMode(KEY, INPUT);
   
   Serial.begin(9600);
-
- 
 }
 
 void loop() {
@@ -45,28 +43,22 @@ void loop() {
  
 
   if(state_key == 0 && old_state_key == 1){
-    Serial.println("Apretamos el boton");
-    set_color();
+    set_color();//cambiamos el color
   }
 
   if(state_s1 == 0 && old_state_s1 == 1 && state_s2 == 1 && old_state_s2 == 1){
-    Serial.println("Giramos a la derecha");
-    set_brillo(10);
+    set_brillo(10);//subimos el brillo
   }
 
 
    if(state_s2 == 0 && old_state_s2 == 1 && state_s1 == 1 && old_state_s1 == 1){
-    Serial.println("Giramos a la izquierda");
-    set_brillo(-10);
+    set_brillo(-10);//bajamos el brillo
   }
-
 
    old_state_key = state_key;
    old_state_s1 = state_s1;
    old_state_s2 = state_s2;
 
-
-  Serial.println(color);
 
   for(int i = 0; i< LARGO ; i++){
 
@@ -102,7 +94,6 @@ void set_color(){
   }
   
 }
-
 
 
 

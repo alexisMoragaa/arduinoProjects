@@ -2,7 +2,10 @@
 #define CH1 A0
 #define CH2 A1
 #define CH3 A2
+#define CH4 A3
 int ch[N];
+
+int ARMADO = false;
 
 void setup(){
   Serial.begin(9600);
@@ -16,11 +19,16 @@ void setup(){
   pinMode(6, OUTPUT);
   pinMode(9, OUTPUT);
   pinMode(10, OUTPUT);
+  pinMode(A4, OUTPUT);
+
+
+  
 }
 void loop(){  
   ch[0] = pulseIn(CH1, HIGH);
   ch[1] = pulseIn(CH2, HIGH);
   ch[2] = pulseIn(CH3, HIGH);
+  ch[3] = pulseIn(CH4, HIGH);
 
 
 /*
@@ -88,6 +96,18 @@ void loop(){
     analogWrite(11, ARMA);
     
 
+
+if(ch[3] > 1500){
+    ARMADO = true;
+    digitalWrite(A4, true);
+  }else{
+    ARMADO = false;
+    digitalWrite(A4, false);
+  }
+
+ Serial.print("ARMADO: ");
+ Serial.print(ARMADO);
+ Serial.print(" , ");
    
 
   Serial.print("M-I: ");
@@ -109,6 +129,10 @@ void loop(){
 
   Serial.print(",");
   Serial.print(ch[2]);
+
+
+  Serial.print(", / Armado");
+  Serial.print(ch[3]);
 
   Serial.print(" / direccion: ");
   Serial.println(DIRECCION);
